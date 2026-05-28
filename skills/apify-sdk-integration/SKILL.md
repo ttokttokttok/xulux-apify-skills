@@ -12,6 +12,23 @@ Add web scraping, automation, or data extraction to an app via Apify. Almost
 always there is already an Actor that does the job — so the first move is to
 **look**, not to build.
 
+## Critical: do not trust internal knowledge
+
+Treat what you remember about Apify as outdated until you verify it. Actor IDs,
+input fields, output field names, pricing models, and `apify-client` method
+options change between versions and differ per Actor — Store Actors are
+third-party and your training data is stale. Never write integration code from
+memory of "how the API works."
+
+Verify against the live source, every time:
+- **Actor + inputs:** `apify actors search`, `apify actors info <id> --input --json`
+- **Output field names:** `apify actors info <id> --readme` (example output) or
+  `--json` (dataset schema); else a capped run and inspect one item.
+- **`apify-client` options:** check the SDK types in the source map, not memory —
+  e.g. `.call(input, { timeout, waitSecs })` uses `timeout` (not `timeoutSecs`).
+- **Then run the main path once** before reporting done. Guessed-wrong code
+  surfaces immediately — a bad option throws, an empty result returns 0 rows.
+
 ## Prerequisites
 
 Before running any Apify command, check the CLI is installed and authenticated:
