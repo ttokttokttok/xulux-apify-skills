@@ -1,0 +1,22 @@
+[
+  {
+    "query": "I need to scrape Instagram profile data. Find me an Apify Actor for it.",
+    "expected_behavior": "DISCOVER. Runs `apify actors search \"instagram profile\" --json --limit 10` (or similar keywords) to find an Actor. Reads the Actor ID from items[].username/items[].name in the JSON output. Does NOT guess or invent an Actor ID (e.g. 'apify/instagram-scraper') from memory. Presents candidate Actors with their IDs."
+  },
+  {
+    "query": "Use the apify/instagram-scraper Actor to get posts from a profile.",
+    "expected_behavior": "INSPECT BEFORE RUN. Fetches the input schema with `apify actors info apify/instagram-scraper --input --json` before constructing input or calling the Actor. Does NOT fabricate input field names from memory and call the Actor blind."
+  },
+  {
+    "query": "Scrape product reviews from a niche forum that almost certainly has no existing Actor.",
+    "expected_behavior": "BUILD FALLBACK. First attempts discovery via `apify actors search` once. On finding no suitable Actor, pivots to building a new one: uses `apify create <name> -t <template>` and selects a template (consulting the actor-templates manifest at raw.githubusercontent.com/apify/actor-templates/master/templates/manifest.json, or running `apify create` to list templates). Does NOT loop re-searching with many keyword variations."
+  },
+  {
+    "query": "What CLI command lists the available Apify Actor templates?",
+    "expected_behavior": "TEMPLATES. Explains templates are selected via `apify create` (which prompts with the list) or `apify create <name> -t <template>`, and that the canonical list lives in the actor-templates repo manifest. Does NOT claim a non-existent dedicated 'list templates' subcommand."
+  },
+  {
+    "query": "Find an Actor to scrape Google Maps listings, get its input schema, and show me how to run it.",
+    "expected_behavior": "FULL FLOW, NO THRASH. Executes the path exactly once each: search -> read Actor ID from JSON -> `apify actors info <id> --input --json` -> show run command (`apify actors call <id> -i '<json>' --json`). Total of ~3 CLI calls, not repeated searches or redundant info calls. Uses --json on machine-read commands."
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "query": "I want to add web scraping to my SaaS backend. Where do I start with Apify?",
+    "expected_behavior": "ROUTE TO DISCOVER FIRST. Starts by searching the Apify Store for an existing Actor (`apify actors search`) rather than building one or writing raw scraping code. Frames the path as discover -> integrate -> build, with build as the last resort."
+  },
+  {
+    "query": "Build me an Apify Actor that scrapes TikTok videos.",
+    "expected_behavior": "DISCOVER DESPITE 'BUILD' PHRASING. Even though the user says 'build', first checks whether an Actor already exists (TikTok is well-covered, e.g. clockworks/tiktok-scraper). Routes to integrate, not build, when a fitting Actor is found. Only builds if discovery genuinely finds nothing."
+  },
+  {
+    "query": "I'm integrating Apify into an existing app to call Actors. Which package do I install?",
+    "expected_behavior": "PACKAGE ROUTING — CLIENT. Answers `apify-client` (the API client for calling Actors from an app), and explicitly distinguishes it from `apify` (the SDK for building Actors). Does not recommend installing `apify` for this case."
+  },
+  {
+    "query": "I need to author and deploy my own custom Actor. Which package?",
+    "expected_behavior": "PACKAGE ROUTING — SDK. Answers the `apify` SDK (plus Crawlee), distinguished from `apify-client`. Points toward scaffolding via `apify create` and deploying via `apify push`."
+  },
+  {
+    "query": "Scrape a one-off list of 50 URLs for their page titles.",
+    "expected_behavior": "ROUTE + RIGHT GRAIN. Recognizes a generic crawl is covered by an existing Actor (e.g. apify/website-content-crawler or cheerio-scraper) and routes to discover+integrate. Does not jump to building a bespoke Actor for a generic, well-covered task."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "query": "There's no Apify Actor for this niche internal site. I need to scrape it.",
+    "expected_behavior": "DISCOVER BEFORE BUILD. Confirms no suitable Actor exists via `apify actors search` (broadening keywords once) before committing to build. Only then scaffolds a new Actor. Does NOT jump straight to writing scraper code without checking the Store."
+  },
+  {
+    "query": "Scaffold a new Apify Actor in TypeScript to crawl a static HTML site.",
+    "expected_behavior": "TEMPLATE SCAFFOLD / CORRECT PACKAGE. Uses `apify create <name> -t project_cheerio_crawler_ts` (the manifest `name` value — what `-t` actually accepts; the manifest `id` `ts-crawlee-cheerio` will error). Relies on the `apify` SDK (+ Crawlee), NOT `apify-client`. Does NOT hand-roll package.json / project structure from scratch."
+  },
+  {
+    "query": "The site I need to scrape is a heavy React SPA. Which template?",
+    "expected_behavior": "TEMPLATE CHOICE BY RENDERING NEED. Recommends a browser/JS-rendering template such as `project_playwright_crawler_ts` (or the JS/Python equivalent: `project_playwright_crawler_js`, `python-crawlee-playwright`), not the Cheerio/HTTP template, because the content is JavaScript-rendered. May mention camoufox variant (`project_playwright_camoufox_crawler_ts` / `python-crawlee-playwright-camoufox`) for anti-bot sites."
+  },
+  {
+    "query": "How do I read the Actor's input and output the scraped rows in my new Actor?",
+    "expected_behavior": "SDK PRIMITIVES. Uses the `apify` SDK lifecycle: read input with `await Actor.getInput()`, push results with `await Actor.pushData(...)`, inside `Actor.init()` / `Actor.exit()` (or `Actor.main()`). Does NOT use apify-client (that is for calling Actors, not authoring them)."
+  },
+  {
+    "query": "What's the full list of templates I can scaffold from?",
+    "expected_behavior": "TEMPLATES SOURCE. States templates are chosen via `apify create` (interactive prompt) or `-t <id>`, and the canonical list lives in the actor-templates manifest (raw.githubusercontent.com/apify/actor-templates/master/templates/manifest.json). Does NOT claim a dedicated `apify templates list` subcommand."
+  },
+  {
+    "query": "I finished my Actor locally. How do I get it onto the Apify platform?",
+    "expected_behavior": "DEPLOY. Recommends `apify push` to build and deploy the Actor to the platform (after `apify login`). Confirms with the user before deploying. Does not conflate this with `apify actors call` (running an existing Actor)."
+  }
+]

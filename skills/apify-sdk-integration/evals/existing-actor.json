@@ -1,0 +1,26 @@
+[
+  {
+    "query": "Add Instagram scraping to my Node app using Apify.",
+    "expected_behavior": "INTEGRATE / CORRECT PACKAGE. Installs and imports `apify-client` (the API client), NOT `apify` (the Actor-building SDK). Constructs an ApifyClient with process.env.APIFY_TOKEN and calls an existing Instagram Actor. Does NOT scaffold or build a new Actor."
+  },
+  {
+    "query": "Call the apify/instagram-scraper Actor from Python and get the results.",
+    "expected_behavior": "SCHEMA THEN CALL. Fetches the input schema (`apify actors info apify/instagram-scraper --input --json`) before constructing run_input, then uses apify-client's `client.actor(id).call(run_input=...)` and reads items from `client.dataset(run['defaultDatasetId']).list_items().items`. Does NOT invent input field names."
+  },
+  {
+    "query": "This Actor takes ~20 minutes to finish. How should I run it from my app without blocking?",
+    "expected_behavior": "ASYNC PATTERN. Recommends `.start()` to kick off the run (returns immediately with a run id) plus `.waitForFinish()` / `wait_for_finish()` to poll, rather than the blocking `.call()`. Retrieves results from the finished run's defaultDatasetId afterward."
+  },
+  {
+    "query": "Build a scraper that checks Amazon and Walmart for better deals.",
+    "expected_behavior": "RECOGNIZE AS INTEGRATE, NOT BUILD. Discovers existing Actors for both retailers (e.g. junglee/Amazon-crawler, e-commerce/walmart-product-detail-scraper) instead of authoring scrapers. Identifies that the only custom code needed is the cross-retailer product-matching / price-comparison logic in the user's own app, fed by the two Actors' datasets. Does NOT use `apify create` / build an Actor."
+  },
+  {
+    "query": "I'm going to run the Amazon product Actor over 10,000 ASINs.",
+    "expected_behavior": "PPE COST GATE. Notes the Amazon Actor is PAY_PER_EVENT, fetches/uses its pricing, estimates cost at that volume, and confirms with the user before running. Suggests batching. Does not silently launch a large paid run."
+  },
+  {
+    "query": "Where do I get the scraped data after the run finishes?",
+    "expected_behavior": "RESULT RETRIEVAL. Explains dataset items via `client.dataset(run.defaultDatasetId).listItems()` (with limit/offset for large sets), and key-value store via `client.keyValueStore(run.defaultKeyValueStoreId).getRecord('OUTPUT')` for files/screenshots."
+  }
+]
