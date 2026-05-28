@@ -44,6 +44,15 @@ Read candidate IDs from `items[].username` + `items[].name` (e.g.
 - it is actively maintained (recent runs, not `isDeprecated`),
 - its pricing model is acceptable for the use case (see [`references/gotchas.md`](references/gotchas.md)).
 
+Before writing code that reads results, also confirm the Actor's **output field
+names** — never assume them from memory (e.g. it's `totalScore`/`title`, not
+`averageRating`/`name`). Check for free, no run needed: `apify actors info <id>
+--readme` (read the Output / example section) or `apify actors info <id> --json`
+(read the dataset schema, if the Actor defines one). Only if neither documents the
+fields, do a tiny capped run (e.g. `maxItems: 3`) and inspect one item. Then code
+defensively: treat an empty result as expected, log row counts at each stage
+(found → filtered → output), and never crash on `[]`.
+
 ```
 Actor fits?
 ├─ YES → Integrate (the common case)
@@ -51,7 +60,8 @@ Actor fits?
 ```
 
 - **Fits → Integrate.** Call it from app code with the `apify-client` package,
-  then read its dataset / key-value output. See [`references/integrate.md`](references/integrate.md).
+  then read its dataset / key-value output. Before writing client code, read
+  [`references/integrate.md`](references/integrate.md).
 - **Nothing fits → Build.** Author a new Actor with the `apify` SDK. Use the
   nested **[apify-actor-development](skills/apify-actor-development/SKILL.md)**
   subskill — it covers scaffolding, schemas, security, logging, standby mode,
